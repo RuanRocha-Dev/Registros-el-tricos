@@ -5,6 +5,7 @@
       "expo-router"
     ],
     "name": "javascript-app",
-    "slug": "javascript-app"
+    "slug": "javascript-app",
+    "newArchEnabled": true
   }
 }
