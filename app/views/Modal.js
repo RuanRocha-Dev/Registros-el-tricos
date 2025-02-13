@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Modal, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Modal, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 
 import getRegistros, { updateRegistro } from '../service/Api';
 import { theme } from '../service/Theme';
-import { formatarDatatempoReal, formataNome } from '../utils/funcoesGlobais';
+import { formataNome } from '../utils/funcoesGlobais';
 
 import InputDefault from '../components/InputDefault';
 
@@ -16,7 +16,7 @@ export default (props) => {
     async function getRegistrosSemAgendamento () {
         try {
             const result = await getRegistros('/registros?scheduled_at=is');
-            serResultados(result)
+            serResultados(result);
         } catch (err) {
             setError('Erro ao carregar os dados');
         }

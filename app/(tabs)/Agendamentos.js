@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, Keyboard, TouchableOpacity  } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Keyboard, TouchableOpacity, Alert  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
+import LottieView from "lottie-react-native";
 
 import getRegistros, { updateRegistro } from '../service/Api';
 import { theme } from '../service/Theme';
@@ -52,6 +53,39 @@ export default () => {
         }
     }
 
+    async function cancelarAgendamento (id = null) {
+        if(id === null) {
+            return false;
+        }
+
+        data = {
+            'scheduled_at': null
+        }
+
+        try {
+            const result = await updateRegistro(`/registros/${id}`, data);
+            if(result) {
+                getR();
+            }
+        } catch (err) {
+            Alert.alert("Erro", "Erro ao atualizar os dados")
+        }
+    }
+
+    function confirmarExclusaoAgendamento (id, nome) {
+        Alert.alert('ATENÇÃO', `Excluir o agendamento do ${nome}?`, [
+            {
+                text: 'Fechar',
+                onPress: () => {},
+                style: 'cancel'
+            },
+            {
+                text: 'Confirmar',
+                onPress: () => cancelarAgendamento(id)
+            }
+        ])
+    }
+
     useFocusEffect(
         useCallback(() => {
             getR();
@@ -67,21 +101,30 @@ export default () => {
     return (
     <SafeAreaView style={style.container}>
         <View style={[style.itemUnico, {height: eventoTeclado ? '60%' : '40%'}]}>
-            <FlatList
-                data={registrosComAgendamento}
-                renderItem = {({ item }) => (
-                    <View style={style.containerText}>
-                        <Text style={style.texto}>
-                            {formataNome(item.name)}  
-                            - 
-                            <Text style={{ fontWeight: 'bold' }} > {item.is_open === '0' ? 'vai abrir' : 'vai fechar'} </Text> 
-                        </Text>
-                        <Text style={style.texto}> {formatarDataPtBr(item.scheduled_at)} </Text>
-                    </View>
-                )}
-                keyExtractor={item => item.id}
-                contentContainerStyle={style.lista}
-            />
+            {registrosComAgendamento != 0 ? (
+                <FlatList
+                    data={registrosComAgendamento}
+                    renderItem = {({ item }) => (
+                        <TouchableOpacity style={style.containerText} onPress={() => confirmarExclusaoAgendamento(item.id, item.name)}>
+                            <Text style={style.texto}>
+                                {formataNome(item.name)}  
+                                - 
+                                <Text style={{ fontWeight: 'bold' }} > {item.is_open === '0' ? 'vai abrir' : 'vai fechar'} </Text> 
+                            </Text>
+                            <Text style={style.texto}> {formatarDataPtBr(item.scheduled_at)} </Text>
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={item => item.id}
+                    contentContainerStyle={style.lista}
+                />
+            ) : (
+                <LottieView
+                    source={require("../utils/animation/empty.json")}
+                    style={{width: "100%", height: "100%"}}
+                    autoPlay
+                    loop
+                />
+            )}
         </View>
         <TouchableOpacity style={[style.btnCriar, {opacity: qntdElementosAgendados ? 0.5 : 1}]} disabled={qntdElementosAgendados}  onPress={() => setModalAberto(true)}> 
             <Text style={style.textBtns}> CRIAR AGENDAMENTO </Text> 
