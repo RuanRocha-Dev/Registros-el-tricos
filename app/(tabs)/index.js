@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from 'expo-router';
 
 import getRegistros, { updateRegistro } from '../service/Api';
 import { formataNome } from '../utils/funcoesGlobais';
@@ -90,9 +91,11 @@ export default () => {
         }
     }
 
-    useEffect(() => {
-        get();
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            get();
+        }, [])
+    )
     
     return (
     <SafeAreaView style={style.container}>

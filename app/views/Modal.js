@@ -69,15 +69,12 @@ export default (props) => {
             return false;
         }
         
-
-        console.warn(registroSelecionado)
-        console.warn(new Date(formatarDataa(dataCompletaAgendamento)))
-        console.warn(typeof new Date(formatarDataa(dataCompletaAgendamento)))
         try {
             const result = await updateRegistro(`/registros/${registroSelecionado}`, {scheduled_at: new Date(formatarDataa(dataCompletaAgendamento))});
-            console.warn(result)
             if(result) {
                 getRegistrosSemAgendamento();
+                props.escutaEvento(true);
+                props.funcao(false);
             }
         } catch (err) {
             Alert.alert("Erro", "Erro ao atualizar os dados")
@@ -96,6 +93,7 @@ export default (props) => {
                 transparent={true}      
                 visible={props.visivel}
                 onRequestClose={() => props.funcao(false)}
+                style={{ flex: 1, position: 'absolute', bottom: 0, left: 0 }}
             >
                 <View style={style.modalView}> 
                     <FlatList
@@ -135,10 +133,8 @@ export default (props) => {
 
 const style = StyleSheet.create({
     modalView: {
-        maxWidth: '95%',
-        height: '95%',
-        marginLeft: '2.5%',
-        marginTop: '2.5%',
+        flex: 1,
+        padding: 30,
         justifyContent: 'center',
         alignItems: 'center',
         opacity: 0.9,

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Keyboard, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, FlatList, StyleSheet, Keyboard, TouchableOpacity  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from 'expo-router';
 
 import getRegistros, { updateRegistro } from '../service/Api';
 import { theme } from '../service/Theme';
@@ -11,7 +12,8 @@ export default () => {
     const [eventoTeclado, setEventoTeclado] = useState(false);
     const [registrosComAgendamento, setRegistrosComAgendamento] = useState(false);
     const [modalAberto, setModalAberto] = useState(false);
-    
+    const [qntdElementosAgendados, setQntdElementosAgendados] = useState(false); // Estado para saber quantos regisros tem no banco de dados, para saber se posso ou n deixar habilitado o botão de agendamento
+
     function ajustaTelaTecladoAberto() { // Evento de teclado que captura se o teclado esta aberto ou fechado
         const tecladoFechado = Keyboard.addListener('keyboardDidHide', () => {
             setEventoTeclado(false);
@@ -30,21 +32,38 @@ export default () => {
     async function getR () {
         try {
             const result = await getRegistros('/registros?scheduled_at=null');
-            setRegistrosComAgendamento(result)
+            setRegistrosComAgendamento(result);
         } catch (err) {
             setError('Erro ao carregar os dados');
         }
     }
 
-    useEffect(() => {
-        getR();
-        ajustaTelaTecladoAberto();
-    }, [])
-
     function mudaStatusModal (el) {
         setModalAberto(el)
     }
 
+    async function todasAsLinhas () {
+        try {
+            const result = await getRegistros('/todasLinhas');
+                const verificaQntd = Number(result) <= Number(registrosComAgendamento.length); 
+                setQntdElementosAgendados(verificaQntd);
+        } catch (err) {
+            setError('Erro ao carregar os dados');
+        }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            getR();
+            ajustaTelaTecladoAberto();
+        }, [])
+    ); 
+
+    useFocusEffect(
+        useCallback(() => {
+            todasAsLinhas();
+        }, [registrosComAgendamento])
+    );
     return (
     <SafeAreaView style={style.container}>
         <View style={[style.itemUnico, {height: eventoTeclado ? '60%' : '40%'}]}>
@@ -64,10 +83,10 @@ export default () => {
                 contentContainerStyle={style.lista}
             />
         </View>
-        <TouchableOpacity style={style.btnCriar} onPress={() => setModalAberto(true)}> 
+        <TouchableOpacity style={[style.btnCriar, {opacity: qntdElementosAgendados ? 0.5 : 1}]} disabled={qntdElementosAgendados}  onPress={() => setModalAberto(true)}> 
             <Text style={style.textBtns}> CRIAR AGENDAMENTO </Text> 
         </TouchableOpacity>
-        <Modal visivel={modalAberto} funcao={mudaStatusModal}/>
+        <Modal visivel={modalAberto} funcao={mudaStatusModal} escutaEvento={(e) => e ? getR() : ''}/>
     </SafeAreaView>
     );
 };

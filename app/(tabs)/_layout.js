@@ -11,7 +11,6 @@ export default function TabLayout() {
     tabBarInactiveTintColor: 'gray',
     tabBarHideOnKeyboard: true,
     tabBarShowLabel: false,
-    unmountOnBlur: true,
     tabBarStyle: {
       width: 200,        
       height: 85,
@@ -69,7 +68,6 @@ export default function TabLayout() {
           tabBarIcon: () => (
             <FontAwesome size={30} name="cog" color='#cccc' />
           ),
-          unmountOnBlur: true,
           headerStyle: {
             backgroundColor: theme.colorsBackground.cinzaEscuro,
           },
