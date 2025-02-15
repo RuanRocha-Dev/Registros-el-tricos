@@ -2,10 +2,25 @@
   "expo": {
     "scheme": "acme",
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "sounds": ["/app/assets.tiro.mp3"]
+        }
+      ]
     ],
     "name": "javascript-app",
-    "slug": "javascript-app",
-    "newArchEnabled": true
+    "slug": "automacao-registros",
+    "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "dca022d5-9a9f-4cf3-9338-5e875ea5c019"
+      },
+      "router": {
+        "origin": false
+      }
+    },
+    "owner": "ruanrocha"
   }
 }

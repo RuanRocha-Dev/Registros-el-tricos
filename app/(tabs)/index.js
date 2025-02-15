@@ -1,19 +1,22 @@
+import { useFocusEffect } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import * as Notifications from 'expo-notifications';
 
-import getRegistros, { updateRegistro } from '../service/Api';
-import { formataNome } from '../utils/funcoesGlobais';
 import { theme } from '../service/Theme';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { formataNome } from '../utils/funcoesGlobais';
+import getRegistros, { updateRegistro } from '../service/Api';
+import { registerForPushNotificationsAsync, sendPushNotification } from '../service/push';
 
 export default () => {
     const [todosRegistros, setTodosRegistros] = useState(null);
     const [retornoWebSocket, setRetornoWebSocket] = useState('');
     const [isDisabled, setisDisabled] = useState(false);
+    const [expoPushToken, setExpoPushToken] = useState('');
 
     const idRegistroAtual = useRef(null);
-    const novoValorIsOpen = useRef('');
+    const novoValorIsOpen = useRef(''); 
     const ws = useRef(null)
 
     useEffect(() => { 
@@ -91,11 +94,34 @@ export default () => {
         }
     }
 
+    function webHookAgendamento () {
+        const url = 'http://192.168.15.3/3001';
+    
+        try {
+            const socket = new WebSocket('ws://192.168.15.3:3001');
+            socket.onmessage = (event) => {
+                const dados = JSON.parse(event.data) 
+                
+                registerForPushNotificationsAsync()
+                .then(token => setExpoPushToken(token ?? ''))
+                .catch(error  => setExpoPushToken(`${error}`));
+        
+                sendPushNotification(expoPushToken, dados.nome, dados.acao); 
+            };
+        } catch (error) {
+            console.error('Erro ao enviar o webhook:', error);
+        }
+    }
+
     useFocusEffect(
         useCallback(() => {
             get();
         }, [])
     )
+
+    useEffect(() => {
+        webHookAgendamento()
+    }, []);
     
     return (
     <SafeAreaView style={style.container}>
