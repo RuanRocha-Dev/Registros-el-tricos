@@ -7,7 +7,7 @@ import * as Notifications from 'expo-notifications';
 import { theme } from '../service/Theme';
 import { formataNome } from '../utils/funcoesGlobais';
 import getRegistros, { updateRegistro } from '../service/Api';
-import { registerForPushNotificationsAsync, sendPushNotification } from '../service/push';
+import { registerForPushNotificationsAsync } from '../service/push';
 
 export default () => {
     const [todosRegistros, setTodosRegistros] = useState(null);
@@ -94,34 +94,21 @@ export default () => {
         }
     }
 
-    function webHookAgendamento () {
-        const url = 'http://192.168.15.3/3001';
-    
-        try {
-            const socket = new WebSocket('ws://192.168.15.3:3001');
-            socket.onmessage = (event) => {
-                const dados = JSON.parse(event.data) 
-                
-                registerForPushNotificationsAsync()
-                .then(token => setExpoPushToken(token ?? ''))
-                .catch(error  => setExpoPushToken(`${error}`));
-        
-                sendPushNotification(expoPushToken, dados.nome, dados.acao); 
-            };
-        } catch (error) {
-            console.error('Erro ao enviar o webhook:', error);
-        }
-    }
-
     useFocusEffect(
         useCallback(() => {
             get();
         }, [])
     )
 
+    registerForPushNotificationsAsync()
+    .then(token => setExpoPushToken(token ?? ''))
+    .catch(error  => setExpoPushToken(`${error}`));
+
     useEffect(() => {
-        webHookAgendamento()
-    }, []);
+        Alert.alert(expoPushToken)
+    }, [expoPushToken])
+
+    console.warn('aqui', expoPushToken)
     
     return (
     <SafeAreaView style={style.container}>

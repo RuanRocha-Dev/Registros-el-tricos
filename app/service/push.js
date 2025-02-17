@@ -12,25 +12,31 @@ Notifications.setNotificationHandler({
     }),
 });
 
-// Função para enviar notificações
 export async function sendPushNotification(expoPushToken, nomeRegistro, acao) {
-const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: 'Agendamento concluido',
-    body: `Registro ${nomeRegistro} ${acao} com sucesso`,
-    data: { someData: 'goes here' },
-};
+    const message = {
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Agendamento concluído',
+        body: `Registro ${nomeRegistro} ${acao} com sucesso`,
+        data: { someData: 'goes here' },
+    };
 
-await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-    Accept: 'application/json',
-    'Accept-encoding': 'gzip, deflate',
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-});
+    try {
+        const response = await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+        });
+
+        const result = await response.json();
+        console.log('Notificação enviada com sucesso:', result);
+    } catch (error) {
+        console.error('Erro ao enviar notificação:', error);
+    }
 }
 
 // Função para tratar erros ao registrar as notificações
@@ -41,43 +47,43 @@ throw new Error(errorMessage);
 
 // Função para registrar notificações push e obter o token
 export async function registerForPushNotificationsAsync() {
-if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-    name: 'default',
-    importance: Notifications.AndroidImportance.MAX,
-    vibrationPattern: [0, 250, 250, 250],
-    lightColor: '#FF231F7C',
-    });
-}
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        sound: '../assets/tiro.mp3',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+        });
+    }
 
-if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+        handleRegistrationError('Permission not granted to get push token for push notification!');
+        return;
+        }
+        const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+        if (!projectId) {
+        handleRegistrationError('Project ID not found');
+        }
+        try {
+        const pushTokenString = (
+            await Notifications.getExpoPushTokenAsync({
+            projectId,
+            })
+        ).data;
+        return pushTokenString;
+        } catch (e) {
+        handleRegistrationError(`${e}`);
+        }
+    } else {
+        handleRegistrationError('Must use physical device for push notifications');
     }
-    if (finalStatus !== 'granted') {
-    handleRegistrationError('Permission not granted to get push token for push notification!');
-    return;
-    }
-    const projectId =
-    Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
-    if (!projectId) {
-    handleRegistrationError('Project ID not found');
-    }
-    try {
-    const pushTokenString = (
-        await Notifications.getExpoPushTokenAsync({
-        projectId,
-        })
-    ).data;
-    console.log(pushTokenString);
-    return pushTokenString;
-    } catch (e) {
-    handleRegistrationError(`${e}`);
-    }
-} else {
-    handleRegistrationError('Must use physical device for push notifications');
-}
 }
