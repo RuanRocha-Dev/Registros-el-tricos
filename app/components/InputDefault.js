@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
 import { formatarDatatempoReal, formatarHora } from '../utils/funcoesGlobais';
@@ -8,13 +8,13 @@ export default (props) => {
     const [data, setData] = useState(0);
     const [hora, setHora] = useState(0);
 
-    function chamaCallBack (name) {
+    const chamaCallBack = useCallback((name) => {
         if(props.place === 'Apenas data') {
             setData(formatarDatatempoReal(name));
         } else {
             setHora(formatarHora(name));
         }
-    }
+    });
 
     useEffect(() => {
         if(props.funcCallBackHora !== undefined) {

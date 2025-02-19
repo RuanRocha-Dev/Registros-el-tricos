@@ -13,7 +13,6 @@ export default () => {
     const [todosRegistros, setTodosRegistros] = useState(null);
     const [retornoWebSocket, setRetornoWebSocket] = useState('');
     const [isDisabled, setisDisabled] = useState(false);
-    const [expoPushToken, setExpoPushToken] = useState('');
 
     const idRegistroAtual = useRef(null);
     const novoValorIsOpen = useRef(''); 
@@ -23,7 +22,7 @@ export default () => {
         ws.current = new WebSocket('ws://192.168.15.32:5088');
 
         ws.current.onopen = () => {
-            setisDisabled(false);
+            // setisDisabled(false);
             console.warn('Conexão WebSocket aberta!')
         };
         
@@ -40,7 +39,7 @@ export default () => {
         };
         
         ws.current.onclose = (event) => {
-            setisDisabled(true);
+            // setisDisabled(true);
             // Alert.alert("Erro", "Conexão fechada, reabra o App")
             console.warn('fechado:', event.code) 
         };
@@ -74,7 +73,7 @@ export default () => {
         try {
             const result = await updateRegistro(`/registros/${idRegistroAtual.current}`, data);
             if(result) {
-                setisDisabled(false);
+                // setisDisabled(false);
                 get();
             }
         } catch (err) {
@@ -83,7 +82,7 @@ export default () => {
     }
     
     const verificaStatusConexao = (id = '', direcao = '') => {
-        setisDisabled(true);
+        // setisDisabled(true);
 
         if (ws.current && ws.current.readyState === WebSocket.OPEN && id != '' && direcao != '') {
             idRegistroAtual.current = id;
@@ -101,15 +100,8 @@ export default () => {
     )
 
     registerForPushNotificationsAsync()
-    .then(token => setExpoPushToken(token ?? ''))
-    .catch(error  => setExpoPushToken(`${error}`));
+    .then(token => {})
 
-    useEffect(() => {
-        Alert.alert(expoPushToken)
-    }, [expoPushToken])
-
-    console.warn('aqui', expoPushToken)
-    
     return (
     <SafeAreaView style={style.container}>
         <View style={[style.itemUnico]}>

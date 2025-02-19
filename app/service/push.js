@@ -3,6 +3,9 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 
+import { createRegistro } from '../service/Api';
+
+
 // Configura o comportamento das notificações
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -39,10 +42,23 @@ export async function sendPushNotification(expoPushToken, nomeRegistro, acao) {
     }
 }
 
+async function salvaTokenDb (token) {
+    data = {
+        token
+    }
+    
+    try {
+        const result = await createRegistro(`/tokens`, data);
+        console.warn('ss', result)
+    } catch (err) {
+        Alert.alert("Erro", "Erro ao salvar token")
+    }
+}
+
 // Função para tratar erros ao registrar as notificações
 function handleRegistrationError(errorMessage) {
-alert(errorMessage);
-throw new Error(errorMessage);
+    alert(errorMessage);
+    throw new Error(errorMessage);
 }
 
 // Função para registrar notificações push e obter o token
@@ -60,28 +76,34 @@ export async function registerForPushNotificationsAsync() {
     if (Device.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
+
         if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        } else {
+            return false;
         }
+
         if (finalStatus !== 'granted') {
-        handleRegistrationError('Permission not granted to get push token for push notification!');
-        return;
+            handleRegistrationError('Permissão não concedida para obter token push para notificação push!');
+            return;
         }
         const projectId =
         Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
-        if (!projectId) {
-        handleRegistrationError('Project ID not found');
+
+        if (!projectId) { 
+            handleRegistrationError('ID do projeto não encontrado');
         }
         try {
-        const pushTokenString = (
-            await Notifications.getExpoPushTokenAsync({
-            projectId,
-            })
-        ).data;
-        return pushTokenString;
+            const pushTokenString = (
+                await Notifications.getExpoPushTokenAsync({
+                projectId,
+                })
+            ).data;
+            salvaTokenDb(pushTokenString)
+            return pushTokenString;
         } catch (e) {
-        handleRegistrationError(`${e}`);
+            handleRegistrationError(`${e}`);
         }
     } else {
         handleRegistrationError('Must use physical device for push notifications');
