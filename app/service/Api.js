@@ -2,14 +2,14 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://backend-registros-production.up.railway.app',
+    // baseURL: 'https://backend-registros-production.up.railway.app',
+    baseURL: 'http://192.168.15.3:3000',
 });
 
 // Função para fazer requisição GET
 export default getRegistros = async (endpoint) => {
     try {
         const response = await api.get(endpoint);
-        console.warn(response.data)
         return response.data;
     } catch (error) {
         console.error('Erro ao fazer GET', error);
@@ -18,18 +18,15 @@ export default getRegistros = async (endpoint) => {
 };
 
 // Função para fazer requisição PUT
-export const updateRegistro = async (endpoint, data) => {
+export const updateRegistro = async (endpoint, data, timeout = 10000) => {
     try {
-        const response = await api.put(endpoint, data, {
-            headers: {
-                "Content-Type": "application/json",
-                "Connection": "close"
-            },
-            timeout: 10000 
-        });
-        return response.data;
+        const response = await api.put(endpoint, data, { timeout });
+        return {'status': 1, 'conteudo': response.data};
     } catch (error) {
-        console.error('Erro ao fazer PUT', error);
+        if (error.code === 'ECONNABORTED') {
+            console.error('Erro: Timeout atingido');
+            return { 'status': 0, 'conteudo': 'Servidor não respondeu' };
+        }
         throw error;
     }
 };
