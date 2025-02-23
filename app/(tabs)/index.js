@@ -8,7 +8,7 @@ import { theme } from '../service/Theme';
 import getRegistros from '../service/Api';
 import { registerForPushNotificationsAsync } from '../service/push';
 
-import WebSocket from '../service/WebSocket';
+import WebSocket from '../components/WebSocket';
 
 export default () => {
     const [todosRegistros, setTodosRegistros] = useState(null);

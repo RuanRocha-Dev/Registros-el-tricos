@@ -3,13 +3,9 @@
     "scheme": "acme",
     "plugins": [
       "expo-router",
-      [
-        "expo-notifications",
-        {
-          "sounds": ["/app/assets.tiro.mp3"]
-        }
-      ]
+      "expo-notifications"
     ],
+    "assetBundlePatterns": ["assets/sound.mp3"],
     "name": "javascript-app",
     "slug": "automacao-registros",
     "newArchEnabled": true,

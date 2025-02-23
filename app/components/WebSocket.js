@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 import { formataNome } from '../utils/funcoesGlobais';
-import { theme } from './Theme';
-import { updateRegistro } from './Api';
+import { theme } from '../service/Theme';
+import { updateRegistro } from '../service/Api';
 
 
 export default ({ dados, callBackGet }) => {

@@ -46,10 +46,9 @@ async function salvaTokenDb (token) {
     data = {
         token
     }
-    
+
     try {
-        const result = await createRegistro(`/tokens`, data);
-        console.warn('ss', result)
+        const result = await createRegistro('/tokens', data);
     } catch (err) {
         Alert.alert("Erro", "Erro ao salvar token")
     }

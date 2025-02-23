@@ -11,6 +11,7 @@ export default function TabLayout() {
     tabBarInactiveTintColor: 'gray',
     tabBarHideOnKeyboard: true,
     tabBarShowLabel: false,
+    tabBarHideOnKeyboard: false,
     tabBarStyle: {
       width: 200,        
       height: 85,
@@ -20,6 +21,7 @@ export default function TabLayout() {
       marginBottom: 40,              
       borderRadius: 50,
       borderTopWidth: 0,
+      position: 'fixed',
       backgroundColor: theme.colorsBackground.cinzaEscuro,
     },
   };
@@ -48,7 +50,7 @@ export default function TabLayout() {
           },
           headerTitleAlign: 'center',
           headerTintColor: '#cccc',
-          headerStatusBarHeight: 30,
+          headerStatusBarHeight: 20,
           tabBarIconStyle: {
             width: '100%',
             height: '100%',
@@ -73,7 +75,7 @@ export default function TabLayout() {
           },
           headerTitleAlign: 'center',
           headerTintColor: '#cccc',
-          headerStatusBarHeight: 30,
+          headerStatusBarHeight: 20,
           tabBarIconStyle: {
             width: '100%',
             height: '100%',

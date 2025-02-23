@@ -99,7 +99,10 @@ export default (props) => {
                     <FlatList
                         data={resultados}
                         renderItem = {({ item }) => (
-                            <TouchableOpacity style={[style.containerText, Boolean(registroSelecionado == item.id) && style.registroSelecionado ]} onPress={() => toogleRegistrosDisponiveis(item.id, item.is_open)}>
+                            <TouchableOpacity  
+                                    style={[style.containerText, Boolean(registroSelecionado == item.id) && style.registroSelecionado, Boolean(item.ip_placa == null) && style.containerDisabled ]} 
+                                    disabled={item.ip_placa == null ? true : false} 
+                                    onPress={() => toogleRegistrosDisponiveis(item.id, item.is_open)}>
                                 <Text style={[style.texto, Boolean(registroSelecionado == item.id) && style.textoRegistroSelecionado]}> 
                                     {formataNome(item.name)}
                                 </Text>
@@ -137,7 +140,7 @@ const style = StyleSheet.create({
         padding: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        opacity: 0.9,
+        opacity: 0.95,
         backgroundColor: theme.colorsBackground.pretoDeFundo,
     },
 
@@ -204,5 +207,9 @@ const style = StyleSheet.create({
         width: '35%',
         paddingVertical: 10,
         borderRadius: 5,
+    },
+
+    containerDisabled: {
+        backgroundColor: '#cccc'
     }
 });
