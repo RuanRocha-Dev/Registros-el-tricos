@@ -3,20 +3,31 @@
     "scheme": "acme",
     "plugins": [
       "expo-router",
-      "expo-notifications"
+      [
+        "expo-notifications",
+        {
+          "sounds": ["./assets/sound.mp3"]
+        }
+      ]
     ],
-    "assetBundlePatterns": ["assets/sound.mp3"],
+    "assetBundlePatterns": [
+      "assets/sound.mp3"
+    ],
     "name": "javascript-app",
     "slug": "automacao-registros",
     "newArchEnabled": true,
     "extra": {
       "eas": {
-        "projectId": "dca022d5-9a9f-4cf3-9338-5e875ea5c019"
+        "projectId": "28b47da5-49b2-4af2-9ecc-aa32b3e006c3"
       },
       "router": {
         "origin": false
       }
     },
-    "owner": "ruanrocha"
+    "owner": "ruanrocha",
+    "android": {
+      "package": "com.ruanrocha.automacaoregistros",
+      "googleServicesFile": "./google-services.json"
+    }
   }
 }

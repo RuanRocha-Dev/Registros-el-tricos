@@ -18,7 +18,7 @@ Notifications.setNotificationHandler({
 export async function sendPushNotification(expoPushToken, nomeRegistro, acao) {
     const message = {
         to: expoPushToken,
-        sound: '../assets/tiro.mp3',
+        sound: 'sound',
         title: 'Agendamento concluído',
         body: `Registro ${nomeRegistro} ${acao} com sucesso`,
         data: { someData: 'goes here' },

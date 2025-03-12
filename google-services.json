@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "603868923305",
+    "firebase_url": "https://colegio-8d482.firebaseio.com",
+    "project_id": "colegio-8d482",
+    "storage_bucket": "colegio-8d482.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603868923305:android:53d09535d816a21d2ab0b8",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603868923305-fdab5e9ii1uivof5o1222vu5uh45ft52.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxL0aLNylcJDlXUzLAFgXHxQtAmR1W9sU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603868923305-fdab5e9ii1uivof5o1222vu5uh45ft52.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

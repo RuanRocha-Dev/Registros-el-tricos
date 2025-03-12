@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    // baseURL: 'https://backend-registros-production.up.railway.app',
-    baseURL: 'http://192.168.15.3:3000',
+    baseURL: 'https://srv737240.hstgr.cloud', // ip da VPS conexão com a API
+    // baseURL: 'http://192.168.15.33:3000', // ip da VPS conexão com a API
 });
 
 // Função para fazer requisição GET
@@ -33,6 +33,17 @@ export const updateRegistro = async (endpoint, data, timeout = 10000) => {
 
 // Função para fazer requisição PUT
 export const createRegistro = async (endpoint, data) => {
+    try {
+        const response = await api.post(endpoint, data);
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao fazer POST', error);
+        throw error;
+    }
+};
+
+// Função para fazer requisição PUT
+export const createRegistroEsp = async (endpoint, data) => {
     try {
         const response = await api.post(endpoint, data);
         return response.data;
