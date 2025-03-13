@@ -6,7 +6,7 @@
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/sound.mp3"]
+          "sounds": ["assets/sound.mp3"]
         }
       ]
     ],

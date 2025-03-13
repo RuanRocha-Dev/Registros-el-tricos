@@ -63,12 +63,13 @@ function handleRegistrationError(errorMessage) {
 // Função para registrar notificações push e obter o token
 export async function registerForPushNotificationsAsync() {
     if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        sound: '../assets/tiro.mp3',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
+        // Corrigir o caminho do som baseado na estrutura de pastas
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            sound: require('../../assets/sound.mp3'),  // Caminho correto
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
         });
     }
 
