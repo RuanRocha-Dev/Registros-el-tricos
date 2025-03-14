@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:603868923305:android:53d09535d816a21d2ab0b8",
         "android_client_info": {
-          "package_name": "host.exp.exponent"
+          "package_name": "com.ruanrocha.automacaoregistros"
         }
       },
       "oauth_client": [
