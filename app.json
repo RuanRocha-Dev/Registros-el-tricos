@@ -15,7 +15,7 @@
     ],
     "name": "javascript-app",
     "slug": "automacao-registros",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "extra": {
       "eas": {
         "projectId": "28b47da5-49b2-4af2-9ecc-aa32b3e006c3"

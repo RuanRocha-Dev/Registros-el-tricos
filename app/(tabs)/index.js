@@ -1,7 +1,8 @@
 import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react-native';
+import React, {useState, useCallback } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import LottieView from "lottie-react-native";
 
 import { theme } from '../service/Theme';
@@ -34,6 +35,7 @@ export default () => {
 
     return (
         <SafeAreaView style={style.container}>
+                <StatusBar style="light" backgroundColor={theme.colorsBackground.cinzaEscuro} />
                 <View style={[style.itemUnico]}>
                     {todosRegistros != null && todosRegistros != [] ? (  // Valida se a consulta trouxe algo ou se houve algum erro de requisição, se houver mostra o lottie
                         <FlatList

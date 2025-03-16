@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 
 import { formataNome } from '../utils/funcoesGlobais';
 import { theme } from '../service/Theme';
@@ -7,9 +7,9 @@ import { createRegistro, createRegistroEsp, updateRegistro } from '../service/Ap
 
 
 export default ({ dados, callBackGet }) => {
+    const btnLigado = require('../../assets/img/Red_Switch_On.png')
+    const btnDesligado = require('../../assets/img/Red_Switch_Off.png')
     
-    const idRegistroAtual = useRef(null);
-
     async function post (comando = null, id, ip_placa = null) {
         if(comando === null) {
             Alert.alert("Erro", "Erro ao receber comando, tente novamente.");
@@ -17,7 +17,7 @@ export default ({ dados, callBackGet }) => {
         }
         
         if(ip_placa === null) {
-            Alert.alert("Erro", "Motor não cadastrado para essa ação!");
+            Alert.alert("Atenção", "Motor não cadastrado para essa ação!");
             return false;
         }
 
@@ -58,8 +58,9 @@ export default ({ dados, callBackGet }) => {
     return (
         <TouchableOpacity 
             onPress={() => {post(dados.is_open !== '0' ? 0 : 1, `${dados.id}`, dados.ip_placa)}} 
-            style={[style.botoes, {backgroundColor: dados.is_open !== '0' ? theme.colorsBackground.verde : theme.colorsBackground.vermelho, opacity: dados.ip_placa !== null ? '' : 0.5}]}
+            style={[style.botoes, {backgroundColor: dados.is_open !== '0' ? theme.colorsBackground.verde : theme.colorsBackground.vermelho, opacity: dados.ip_placa !== null ? '' : 0.2}]}
         >
+            <Image source={dados.is_open !== '0' ? btnLigado : btnDesligado} style={style.imagens} />
             <Text style={style.textBtns}> {formataNome(dados.name)} </Text>
         </TouchableOpacity>
     );
@@ -68,8 +69,10 @@ export default ({ dados, callBackGet }) => {
 const style = StyleSheet.create({
     botoes: {
         width: '100%',
+        height: 65,
         display: 'flex',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
         borderRadius: 15,
@@ -77,8 +80,13 @@ const style = StyleSheet.create({
     },
     
     textBtns: {
-        textTransform: 'uppercase', // 192.168.15.32:5088
-        fontSize: 28,
+        textTransform: 'uppercase',
+        fontSize: 24,
         color: '#fff',
     },
+
+    imagens: {
+        width: 60,
+        height: 60
+    }
 })

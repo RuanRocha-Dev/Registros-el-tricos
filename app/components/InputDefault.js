@@ -35,7 +35,7 @@ const style = StyleSheet.create({
         height: '150px',
         borderColor: '#ccc',
         borderWidth: 1,     
-        borderRadius: 25,   
+        borderRadius: 15,   
         fontSize: 20,       
         backgroundColor: '#fff',
         textAlign: 'center'
