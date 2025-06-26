@@ -63,7 +63,8 @@ export default (props) => {
             return false;
         }
         
-        const dataCompletaAgendamento = `${dataAgendamento} ${horaAgendamento}`;
+        const dataCompletaAgendamento = `${dataAgendamento}/2025 ${horaAgendamento}`;
+        
         if (formatarDataa(dataCompletaAgendamento) < formatarDataa(new Date().toLocaleString())) {
             Alert.alert('Atenção', 'A data completa não pode ser menor que agora.');
             return false;

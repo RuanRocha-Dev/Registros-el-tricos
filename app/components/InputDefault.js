@@ -32,7 +32,7 @@ export default (props) => {
 const style = StyleSheet.create({
     inputDefault: {
         width: '100%',
-        height: '150px',
+        // height: 150,
         borderColor: '#ccc',
         borderWidth: 1,     
         borderRadius: 15,   

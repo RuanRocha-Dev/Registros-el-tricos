@@ -9,20 +9,34 @@ export const formataNome = (str) => {
 };
 
 export const formatarDatatempoReal = (data) => {
-    if (!data) return ''; 
+    if (!data) return '';
 
-    let valor = data.replace(/\D/g, ''); 
+    // Remove caracteres não numéricos e limita a 4 dígitos
+    let valor = data.replace(/\D/g, '').substring(0, 4);
+    
+    if (valor.length === 0) return '';
+    
+    // Separa dia e mês
     let dia = valor.substring(0, 2);
     let mes = valor.substring(2, 4);
-    let ano = valor.substring(4, 8);
 
-    if (dia.length === 2) dia = Math.min(31, Math.max(1, parseInt(dia, 10))).toString().padStart(2, '0');
-    if (mes.length === 2) mes = Math.min(12, Math.max(1, parseInt(mes, 10))).toString().padStart(2, '0');
-    if (ano.length === 4) ano = Math.min(2999, Math.max(1000, parseInt(ano, 10))).toString();
+    // Valida e formata o dia (01-31)
+    if (dia.length === 2) {
+        dia = Math.min(31, Math.max(1, parseInt(dia, 10) || 1))
+            .toString()
+            .padStart(2, '0');
+    }
+    
+    // Valida e formata o mês (01-12)
+    if (mes.length === 2) {
+        mes = Math.min(12, Math.max(1, parseInt(mes, 10) || 1))
+            .toString()
+            .padStart(2, '0');
+    }
 
+    // Retorna formatado conforme digitação
     if (valor.length <= 2) return dia;
-    if (valor.length <= 4) return `${dia}/${mes}`;
-    return `${dia}/${mes}/${ano}`;
+    return `${dia}/${mes}`;
 };
 
 

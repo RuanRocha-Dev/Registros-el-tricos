@@ -15,6 +15,7 @@
     ],
     "name": "javascript-app",
     "slug": "automacao-registros",
+    "orientation": "portrait",
     "newArchEnabled": false,
     "extra": {
       "eas": {
